@@ -12,6 +12,12 @@ import {
   Grid,
   Card,
   CardContent,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  useMediaQuery,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -24,6 +30,8 @@ import CodeIcon from '@mui/icons-material/Code';
 import LaunchIcon from '@mui/icons-material/Launch';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 import NavigationMenu from './NavigationMenu';
 import OptimizedImage from './OptimizedImage';
 
@@ -214,7 +222,9 @@ const LandingPage: React.FC = () => {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoInView, setVideoInView] = useState(false);
   const [hasAutoPlayedOnce, setHasAutoPlayedOnce] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -464,6 +474,22 @@ const LandingPage: React.FC = () => {
     return Array.from({ length }, () => 'jiu jitsu').join(' ');
   };
 
+  const handleMobileMenuClose = () => {
+    setMobileMenuOpen(false);
+  };
+
+  const handleMobileMenuItemClick = (sectionId: string) => {
+    scrollToSection(sectionId);
+    setMobileMenuOpen(false);
+  };
+
+  const mobileMenuItems = [
+    { id: 'about-me', label: 'About' },
+    { id: 'experience', label: 'Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'contact', label: 'Contact' },
+  ];
+
   return (
     <>
       {/* Scroll Progress Indicator */}
@@ -507,6 +533,7 @@ const LandingPage: React.FC = () => {
               WebkitTextFillColor: 'transparent',
               textShadow: '0 0 20px rgba(66, 165, 245, 0.3)',
               mb: 0,
+              fontSize: { xs: '1.3rem', sm: '1.5rem', md: '1.75rem' },
             }}
           >
             Tanner Tovey
@@ -519,13 +546,83 @@ const LandingPage: React.FC = () => {
               fontWeight: 300,
               mb: 0,
               lineHeight: 1,
+              fontSize: { xs: '0.9rem', sm: '1rem', md: '1.1rem' },
             }}
           >
             - Full Stack Engineer
           </Typography>
         </BrandSection>
-        <NavigationMenu onNavigate={scrollToSection} activeSection={activeSection} />
+        
+        {/* Desktop Navigation */}
+        {!isMobile && (
+          <NavigationMenu onNavigate={scrollToSection} activeSection={activeSection} />
+        )}
+        
+        {/* Mobile Menu Button */}
+        {isMobile && (
+          <IconButton
+            onClick={() => setMobileMenuOpen(true)}
+            sx={{
+              color: theme.palette.text.primary,
+              '&:hover': {
+                backgroundColor: 'rgba(66, 165, 245, 0.1)',
+              }
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+        )}
       </NavBar>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        anchor="right"
+        open={mobileMenuOpen}
+        onClose={handleMobileMenuClose}
+        sx={{
+          '& .MuiDrawer-paper': {
+            width: '280px',
+            backgroundColor: 'rgba(18, 18, 18, 0.95)',
+            backdropFilter: 'blur(20px)',
+            borderLeft: '1px solid rgba(66, 165, 245, 0.3)',
+          },
+        }}
+      >
+        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
+            Menu
+          </Typography>
+          <IconButton onClick={handleMobileMenuClose} sx={{ color: theme.palette.text.primary }}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <List>
+          {mobileMenuItems.map((item) => (
+            <ListItem key={item.id} disablePadding>
+              <ListItemButton
+                onClick={() => handleMobileMenuItemClick(item.id)}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(66, 165, 245, 0.1)',
+                  },
+                  borderLeft: activeSection === item.id ? '3px solid #42a5f5' : '3px solid transparent',
+                }}
+              >
+                <ListItemText 
+                  primary={item.label}
+                  sx={{
+                    '& .MuiListItemText-primary': {
+                      color: activeSection === item.id ? theme.palette.primary.main : theme.palette.text.primary,
+                      fontWeight: activeSection === item.id ? 600 : 400,
+                      fontSize: '1.1rem',
+                    }
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
 
       <BinaryBackground>
         <BinaryText>
@@ -1034,58 +1131,60 @@ const LandingPage: React.FC = () => {
         </Box>
         
         <Container maxWidth="lg">
-          <Box sx={{ position: 'relative', minHeight: '800px' }}>
-            {/* Central Timeline Line */}
-            <Box sx={{
-              position: 'absolute',
-              left: '50%',
-              top: 30,
-              height: '730px',
-              width: '3px',
-              bgcolor: theme.palette.primary.main,
-              opacity: 0.4,
-              transform: 'translateX(-50%)'
-            }} />
+          {/* Desktop Timeline */}
+          {!isMobile && (
+            <Box sx={{ position: 'relative', minHeight: '800px' }}>
+              {/* Central Timeline Line */}
+              <Box sx={{
+                position: 'absolute',
+                left: '50%',
+                top: 30,
+                height: '730px',
+                width: '3px',
+                bgcolor: theme.palette.primary.main,
+                opacity: 0.4,
+                transform: 'translateX(-50%)'
+              }} />
 
-            {/* Timeline Headers */}
-            <Box sx={{ display: 'flex', mb: 4 }}>
-              <Box sx={{ flex: 1, textAlign: 'center', pr: 2 }}>
-                <Typography 
-                  variant="h4" 
-                  sx={{
-                    fontFamily: 'Playfair Display, serif',
-                    fontWeight: 700,
-                    fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' },
-                    background: 'linear-gradient(135deg, #42a5f5 0%, #1976d2 50%, #0d47a1 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    textShadow: '0 0 20px rgba(66, 165, 245, 0.3)',
-                    mb: 1,
-                  }}
-                >
-                  Education
-                </Typography>
+              {/* Timeline Headers */}
+              <Box sx={{ display: 'flex', mb: 4 }}>
+                <Box sx={{ flex: 1, textAlign: 'center', pr: 2 }}>
+                  <Typography 
+                    variant="h4" 
+                    sx={{
+                      fontFamily: 'Playfair Display, serif',
+                      fontWeight: 700,
+                      fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' },
+                      background: 'linear-gradient(135deg, #42a5f5 0%, #1976d2 50%, #0d47a1 100%)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 20px rgba(66, 165, 245, 0.3)',
+                      mb: 1,
+                    }}
+                  >
+                    Education
+                  </Typography>
+                </Box>
+                <Box sx={{ flex: 1, textAlign: 'center', pl: 2 }}>
+                  <Typography 
+                    variant="h4" 
+                    sx={{
+                      fontFamily: 'Playfair Display, serif',
+                      fontWeight: 700,
+                      fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' },
+                      background: 'linear-gradient(135deg, #42a5f5 0%, #1976d2 50%, #0d47a1 100%)',
+                      backgroundClip: 'text',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      textShadow: '0 0 20px rgba(66, 165, 245, 0.3)',
+                      mb: 1,
+                    }}
+                  >
+                    Work Experience
+                  </Typography>
+                </Box>
               </Box>
-              <Box sx={{ flex: 1, textAlign: 'center', pl: 2 }}>
-                <Typography 
-                  variant="h4" 
-                  sx={{
-                    fontFamily: 'Playfair Display, serif',
-                    fontWeight: 700,
-                    fontSize: { xs: '1.8rem', md: '2.2rem', lg: '2.5rem' },
-                    background: 'linear-gradient(135deg, #42a5f5 0%, #1976d2 50%, #0d47a1 100%)',
-                    backgroundClip: 'text',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    textShadow: '0 0 20px rgba(66, 165, 245, 0.3)',
-                    mb: 1,
-                  }}
-                >
-                  Work Experience
-                </Typography>
-              </Box>
-            </Box>
 
             {/* Year Markers */}
             <Box sx={{ position: 'relative', minHeight: '800px' }}>
@@ -1234,6 +1333,102 @@ const LandingPage: React.FC = () => {
               ))}
             </Box>
           </Box>
+          )}
+
+          {/* Mobile Timeline */}
+          {isMobile && (
+            <Box sx={{ mt: 4 }}>
+              {/* Mobile Timeline Items */}
+              {[
+                // Georgia Tech 2025 - Current
+                {
+                  type: 'education',
+                  title: 'Georgia Institute of Technology',
+                  description: 'Master of Science in Computer Science - Part Time',
+                  year: '2025',
+                  active: true,
+                },
+                // Software Engineer Associate 2023-2025 (shortened description)
+                {
+                  type: 'work',
+                  title: 'Optum - Software Engineer Associate',
+                  description: 'Full Stack Engineer utilizing technologies such as Databricks, Azure, Angular, and Spring to build medical grade applications.',
+                  year: '2023-2025',
+                  active: false,
+                },
+                // Optum Intern 2022-2023
+                {
+                  type: 'work',
+                  title: 'Optum - Software Engineer Intern',
+                  description: 'Lead a team of interns to build a site reliability application',
+                  year: '2022-2023',
+                  active: false,
+                },
+                // Code Platoon TA 2022
+                {
+                  type: 'work',
+                  title: 'Code Platoon - Teaching Assistant',
+                  description: 'Help teach veterans how to code using Python and Javascript',
+                  year: '2022',
+                  active: false,
+                },
+                // College of Coastal Georgia 2020-2022 (no relevant coursework)
+                {
+                  type: 'education',
+                  title: 'College of Coastal Georgia',
+                  description: 'Bachelor of Science in Health Information: Minor in Data Analytics',
+                  year: '2020-2022',
+                  active: false,
+                }
+              ].map((item, index) => (
+                <Box key={index} sx={{ mb: 3 }}>
+                  <Paper 
+                    elevation={2}
+                    sx={{ 
+                      p: 3, 
+                      bgcolor: theme.palette.background.paper,
+                      border: `2px solid ${item.active ? theme.palette.success.main : theme.palette.divider}`,
+                      borderRadius: 2,
+                      position: 'relative',
+                      borderLeft: `4px solid ${item.type === 'education' ? '#42a5f5' : '#1976d2'}`,
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: theme.shadows[4]
+                      }
+                    }}
+                  >
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                      <Typography variant="h6" sx={{ color: theme.palette.text.primary, fontWeight: 600, flex: 1 }}>
+                        {item.title}
+                      </Typography>
+                      <Typography 
+                        variant="caption" 
+                        sx={{ 
+                          bgcolor: item.type === 'education' ? 'rgba(66, 165, 245, 0.2)' : 'rgba(25, 118, 210, 0.2)',
+                          color: item.type === 'education' ? '#42a5f5' : '#1976d2',
+                          px: 2, 
+                          py: 1, 
+                          borderRadius: 1,
+                          fontWeight: 600,
+                          fontSize: '0.8rem'
+                        }}
+                      >
+                        {item.year}
+                      </Typography>
+                    </Box>
+                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
+                      {item.description}
+                    </Typography>
+                    {item.active && (
+                      <Typography variant="caption" sx={{ color: theme.palette.success.main, fontWeight: 600, mt: 2, display: 'block' }}>
+                        Current
+                      </Typography>
+                    )}
+                  </Paper>
+                </Box>
+              ))}
+            </Box>
+          )}
         </Container>
       </Box>
 
