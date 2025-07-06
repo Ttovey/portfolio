@@ -671,7 +671,7 @@ const LandingPage: React.FC = () => {
                     console.error('Video failed to load');
                   }}
                 >
-                  <source src="/toro_cup_optimized.mp4" type="video/mp4" />
+                  <source src={`${process.env.PUBLIC_URL}/toro_cup_optimized.mp4`} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               ) : (
@@ -1451,7 +1451,7 @@ const LandingPage: React.FC = () => {
             >
               <Box
                 component="img"
-                src="/coming_soon.jpeg"
+                src={`${process.env.PUBLIC_URL}/coming_soon.jpeg`}
                 alt="Jiu Jitsu Exchange App Coming Soon"
                 loading="lazy"
                 sx={{
@@ -1585,7 +1585,7 @@ const LandingPage: React.FC = () => {
           {/* Resume Download */}
           <IconButton
             component="a"
-            href="/Tanner Tovey - Full Stack Engineer .pdf"
+            href={`${process.env.PUBLIC_URL}/Tanner Tovey - Full Stack Engineer .pdf`}
             download="Tanner_Tovey_Resume.pdf"
             sx={{
               color: theme.palette.primary.main,

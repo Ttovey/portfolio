@@ -22,15 +22,15 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({ src, alt, sx, height = 
       }}
     >
       {/* WebP for modern browsers */}
-      <source srcSet={`/${baseName}.webp`} type="image/webp" />
+      <source srcSet={`${process.env.PUBLIC_URL}/${baseName}.webp`} type="image/webp" />
       
       {/* Compressed PNG fallback */}
-      <source srcSet={`/${baseName}_compressed.png`} type="image/png" />
+      <source srcSet={`${process.env.PUBLIC_URL}/${baseName}_compressed.png`} type="image/png" />
       
       {/* Original as final fallback */}
       <Box
         component="img"
-        src={`/${src}`}
+        src={`${process.env.PUBLIC_URL}/${src}`}
         alt={alt}
         loading="lazy"
         sx={{
