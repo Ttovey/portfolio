@@ -1366,7 +1366,7 @@ const LandingPage: React.FC = () => {
                    </IconButton>
                  </Box>
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
-                  A comprehensive platform for the jiu jitsu community to connect, share techniques, and track progress.
+                  A updated, modern website for the Jiu Jitsu Exchange, a community of jiu jitsu practitioners.
                 </Typography>
               </Box>
             </Paper>
@@ -1428,7 +1428,7 @@ const LandingPage: React.FC = () => {
                    </IconButton>
                  </Box>
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
-                  An elegant website showcasing premium wines with an immersive tasting experience and online ordering.
+                  An elegant website showcasing premium wines with an immersive story telling experience and online ordering.
                 </Typography>
               </Box>
             </Paper>
@@ -1484,7 +1484,7 @@ const LandingPage: React.FC = () => {
                    </IconButton>
                  </Box>
                 <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
-                  Mobile application bringing the jiu jitsu community together with enhanced features and real-time interactions.
+                  A full stack application for the Jiu Jitsu Exchange. This application will include gym management, payments, and student progress / interactions.
                 </Typography>
               </Box>
             </Paper>
